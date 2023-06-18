@@ -7,13 +7,13 @@
     <x>0</x>
     <y>0</y>
     <width>620</width>
-    <height>400</height>
+    <height>350</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
     <width>620</width>
-    <height>400</height>
+    <height>350</height>
    </size>
   </property>
   <property name="maximumSize">
@@ -28,63 +28,6 @@
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <widget class="QPlainTextEdit" name="messageTextEdit"/>
-   </item>
-   <item>
-    <layout class="QHBoxLayout" name="horizontalLayout">
-     <property name="spacing">
-      <number>7</number>
-     </property>
-     <item>
-      <widget class="QCheckBox" name="md5CheckBox">
-       <property name="text">
-        <string>MD5</string>
-       </property>
-       <property name="checked">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QCheckBox" name="sha1CheckBox">
-       <property name="text">
-        <string>SHA1</string>
-       </property>
-       <property name="checked">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QCheckBox" name="sha256CheckBox">
-       <property name="text">
-        <string>SHA256</string>
-       </property>
-       <property name="checked">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QCheckBox" name="sha512CheckBox">
-       <property name="text">
-        <string>SHA512</string>
-       </property>
-       <property name="checked">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QCheckBox" name="crc32CheckBox">
-       <property name="text">
-        <string>CRC32</string>
-       </property>
-       <property name="checked">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-    </layout>
    </item>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_2">
