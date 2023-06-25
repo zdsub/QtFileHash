@@ -11,10 +11,12 @@ class FileHashThread : public QThread
     Q_OBJECT
 
 public:
-    FileHashThread(QStringList pathList, QObject* parent = nullptr);
+    FileHashThread(QObject* parent = nullptr);
     ~FileHashThread();
 
     void run();
+    // 设置待校验文件路径集合
+    void setPathList(QStringList pathList);
 
 private:
     // 计算文件哈希
@@ -41,10 +43,11 @@ signals:
     void hashEnded();
     // 哈希校验错误
     void hashError(QString error);
-
+    // 哈希校验进度改变
     void hashProgressChanged(int size, long fileSize);
+    // 哈希校验索引改变
     void hashIndexChanged(int index);
-
+    // 哈希校验结果
     void hashResult(FileHash fileHash);
 };
 

@@ -2,7 +2,7 @@
 
 #include <QFile>
 
-FileHashThread::FileHashThread(QStringList pathList, QObject* parent) : QThread(parent), pathList(pathList)
+FileHashThread::FileHashThread(QObject* parent) : QThread(parent)
 {
     md4 = new QCryptographicHash(QCryptographicHash::Md4);
     md5 = new QCryptographicHash(QCryptographicHash::Md5);
@@ -18,6 +18,11 @@ FileHashThread::~FileHashThread()
     delete sha1;
     delete sha256;
     delete sha512;
+}
+
+void FileHashThread::setPathList(QStringList pathList)
+{
+    this->pathList = pathList;
 }
 
 void FileHashThread::run()
@@ -36,7 +41,10 @@ void FileHashThread::run()
 void FileHashThread::hash(QString path) {
     QFile file(path);
     if (!file.open(QIODevice::ReadOnly))
+    {
         emit hashError("文件打开失败");
+        return;
+    }
 
     long long size = 0;
     long long fileSize = file.size();
