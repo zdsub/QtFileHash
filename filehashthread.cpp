@@ -2,7 +2,7 @@
 
 #include <QFile>
 
-FileHashThread::FileHashThread(QString path, QObject* parent) : QThread(parent), path(path)
+FileHashThread::FileHashThread(QStringList pathList, QObject* parent) : QThread(parent), pathList(pathList)
 {
     md4 = new QCryptographicHash(QCryptographicHash::Md4);
     md5 = new QCryptographicHash(QCryptographicHash::Md5);
@@ -24,15 +24,22 @@ void FileHashThread::run()
 {
     emit hashStarted();
 
-    QFile file(path);
-    if (!file.open(QIODevice::ReadOnly))
+    for (int i = 0; i < pathList.size(); i++)
     {
-        emit hashError("文件打开失败");
-        return;
+        hash(pathList[i]);
+        emit hashIndexChanged(i + 1);
     }
 
-    long size = 0;
-    long fileSize = file.size();
+    emit hashEnded();
+}
+
+void FileHashThread::hash(QString path) {
+    QFile file(path);
+    if (!file.open(QIODevice::ReadOnly))
+        emit hashError("文件打开失败");
+
+    long long size = 0;
+    long long fileSize = file.size();
 
     while (true)
     {
@@ -61,6 +68,6 @@ void FileHashThread::run()
     QString _sha256 = sha256->result().toHex();
     QString _sha512 = sha512->result().toHex();
 
-    FileHash fileHash(path, fileSize, _md4, _md5, _sha1, _sha256, _sha512);
-    emit hashFinished(fileHash);
+    FileHash FileHash(path, fileSize, _md4, _md5, _sha1, _sha256, _sha512);
+    emit hashResult(FileHash);
 }

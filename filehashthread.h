@@ -11,13 +11,18 @@ class FileHashThread : public QThread
     Q_OBJECT
 
 public:
-    FileHashThread(QString path, QObject* parent = nullptr);
+    FileHashThread(QStringList pathList, QObject* parent = nullptr);
     ~FileHashThread();
 
     void run();
 
 private:
-    QString path;
+    // 计算文件哈希
+    void hash(QString path);
+
+private:
+    // 待计算文件路径集合
+    QStringList pathList;
 
     // 文件缓冲区，4KB
     int bufferSize = 4096;
@@ -30,11 +35,17 @@ private:
     QCryptographicHash* sha512 = nullptr;
 
 signals:
+    // 哈希校验开始
     void hashStarted();
-    void hashFinished(FileHash fileHash);
+    // 哈希校验结束
+    void hashEnded();
+    // 哈希校验错误
     void hashError(QString error);
 
     void hashProgressChanged(int size, long fileSize);
+    void hashIndexChanged(int index);
+
+    void hashResult(FileHash fileHash);
 };
 
 #endif // FILEHASHTHREAD_H
