@@ -44,9 +44,9 @@ signals:
     // 哈希校验错误
     void hashError(QString error);
     // 哈希校验进度改变
-    void hashProgressChanged(int size, long fileSize);
+    void hashProgressChanged(long long size, long long fileSize);
     // 哈希校验索引改变
-    void hashIndexChanged(int index);
+    void hashIndexChanged(int index, int count);
     // 哈希校验结果
     void hashResult(FileHash fileHash);
 };

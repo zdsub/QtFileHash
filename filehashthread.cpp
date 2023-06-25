@@ -32,7 +32,7 @@ void FileHashThread::run()
     for (int i = 0; i < pathList.size(); i++)
     {
         hash(pathList[i]);
-        emit hashIndexChanged(i + 1);
+        emit hashIndexChanged(i + 1, pathList.size());
     }
 
     emit hashEnded();
@@ -42,7 +42,7 @@ void FileHashThread::hash(QString path) {
     QFile file(path);
     if (!file.open(QIODevice::ReadOnly))
     {
-        emit hashError("文件打开失败");
+        emit hashError(path + "\n文件打开失败\n");
         return;
     }
 

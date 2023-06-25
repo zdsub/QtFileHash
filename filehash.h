@@ -6,6 +6,7 @@
 class FileHash
 {
 public:
+    FileHash();
     FileHash(QString path, long size, QString md4, QString md5, QString sha1, QString sha256, QString sha512);
     ~FileHash();
 

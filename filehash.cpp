@@ -1,5 +1,10 @@
 #include "filehash.h"
 
+FileHash::FileHash()
+{
+
+}
+
 FileHash::FileHash(QString path, long size, QString md4, QString md5, QString sha1, QString sha256, QString sha512) :
     _path(path), _size(size), _md4(md4), _md5(md5), _sha1(sha1), _sha256(sha256), _sha512(sha512)
 {
@@ -49,7 +54,7 @@ QString FileHash::sha512()
 QString FileHash::toString()
 {
     QString message = "文件: %1\n"
-                      "大小: %2\n"
+                      "大小: %2字节\n"
                       "MD4: %3\n"
                       "MD5: %4\n"
                       "SHA1: %5\n"
