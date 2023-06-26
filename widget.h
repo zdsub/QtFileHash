@@ -19,15 +19,15 @@ public:
 
 private slots:
     // 重置进度条
-    void resetProgressBar();
+    void resetProgressBar(int count);
     // 添加信息 - 校验结果
     void addMessage(FileHash fileHash);
     // 添加信息 - 错误消息
     void addMessage(QString error);
     // 当前进度改变
-    void currentChange(long long currentSize, long long totalSize);
+    void currentChange(int progress);
     // 总进度改变
-    void totalChange(int current, int total);
+    void totalChange(int index);
 
     void on_openButton_clicked();
 

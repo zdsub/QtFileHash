@@ -27,12 +27,12 @@ void FileHashThread::setPathList(QStringList pathList)
 
 void FileHashThread::run()
 {
-    emit hashStarted();
+    emit hashStarted(pathList.size());
 
     for (int i = 0; i < pathList.size(); i++)
     {
         hash(pathList[i]);
-        emit hashIndexChanged(i + 1, pathList.size());
+        emit hashIndexChanged(i + 1);
     }
 
     emit hashEnded();
@@ -62,7 +62,7 @@ void FileHashThread::hash(QString path) {
             sha512->addData(byteArray);
 
             size += byteArray.size();
-            emit hashProgressChanged(size, fileSize);
+            emit hashProgressChanged(static_cast<double>(size) / fileSize * 100);
         }
         else
             break;

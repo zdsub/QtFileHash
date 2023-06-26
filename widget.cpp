@@ -23,11 +23,11 @@ Widget::~Widget()
     delete ui;
 }
 
-void Widget::resetProgressBar()
+void Widget::resetProgressBar(int count)
 {
     ui->currentProgressBar->setValue(0);
 
-    ui->totalProgressBar->setMaximum(100);
+    ui->totalProgressBar->setMaximum(count);
     ui->totalProgressBar->setValue(0);
 }
 
@@ -41,16 +41,14 @@ void Widget::addMessage(QString error)
     ui->messageTextEdit->appendPlainText(error);
 }
 
-void Widget::currentChange(long long currentSize, long long totalSize)
+void Widget::currentChange(int progress)
 {
-    int value = (double)currentSize / totalSize * 100;
-    ui->currentProgressBar->setValue(value);
+    ui->currentProgressBar->setValue(progress);
 }
 
-void Widget::totalChange(int current, int total)
+void Widget::totalChange(int index)
 {
-    ui->totalProgressBar->setMaximum(total);
-    ui->totalProgressBar->setValue(current);
+    ui->totalProgressBar->setValue(index);
 }
 
 
