@@ -28,7 +28,6 @@ private slots:
     void totalChange(int index);
 
     void on_openButton_clicked();
-
     void on_clearButton_clicked();
 
 private:

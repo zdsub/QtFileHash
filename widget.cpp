@@ -9,11 +9,11 @@ Widget::Widget(QWidget *parent)
 {
     ui->setupUi(this);
 
-    connect(fileHashThread, &FileHashThread::hashStarted, this, &Widget::resetProgressBar);
-    connect(fileHashThread, &FileHashThread::hashResult, this, static_cast<void (Widget::*)(QString)> (&Widget::addMessage));
-    connect(fileHashThread, &FileHashThread::hashError, this, static_cast<void (Widget::*)(QString)> (&Widget::addMessage));
-    connect(fileHashThread, &FileHashThread::hashProgressChanged, this, &Widget::currentChange);
-    connect(fileHashThread, &FileHashThread::hashIndexChanged, this, &Widget::totalChange);
+    connect(fileHashThread, SIGNAL(hashStarted(int)), this, SLOT(resetProgressBar(int)));
+    connect(fileHashThread, SIGNAL(hashResult(QString)), this, SLOT(addMessage(QString)));
+    connect(fileHashThread, SIGNAL(hashError(QString)), this, SLOT(addMessage(QString)));
+    connect(fileHashThread, SIGNAL(hashProgressChanged(int)), this, SLOT(currentChange(int)));
+    connect(fileHashThread, SIGNAL(hashIndexChanged(int)), this, SLOT(totalChange(int)));
 }
 
 Widget::~Widget()

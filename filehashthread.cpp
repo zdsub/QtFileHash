@@ -38,22 +38,22 @@ void FileHashThread::run()
     emit hashEnded();
 }
 
-void FileHashThread::hash(QString path) {
-    QFile file(path);
+void FileHashThread::hash(QString filePath) {
+    QFile file(filePath);
     if (!file.open(QIODevice::ReadOnly))
     {
-        emit hashError(path + "\n文件打开失败\n");
+        emit hashError(filePath + "\n文件打开失败\n");
         return;
     }
 
-    long long size = file.size();
-    long long currentSize = 0;
+    long long size = 0;
+    long long fileSize = file.size();
 
     while (true)
     {
         QByteArray byteArray = file.read(bufferSize);
 
-        if (currentSize != size)
+        if (size != fileSize)
         {
             md4->addData(byteArray);
             md5->addData(byteArray);
@@ -61,11 +61,15 @@ void FileHashThread::hash(QString path) {
             sha256->addData(byteArray);
             sha512->addData(byteArray);
 
-            currentSize += byteArray.size();
-            emit hashProgressChanged(static_cast<double>(currentSize) / size * 100);
+            size += byteArray.size();
+            emit hashProgressChanged(static_cast<double>(size) / fileSize * 100);
         }
         else
+        {
+            if (fileSize == 0)
+                emit hashProgressChanged(100);
             break;
+        }
     }
 
     file.close();
@@ -92,7 +96,7 @@ void FileHashThread::hash(QString path) {
                       "SHA1: %5\n"
                       "SHA256: %6\n"
                       "SHA512: %7\n";
-    QString result = message.arg(path, QString::number(size), _md4, _md5, _sha1, _sha256, _sha512);
+    QString result = message.arg(filePath, QString::number(fileSize), _md4, _md5, _sha1, _sha256, _sha512);
 
     emit hashResult(result);
 }
