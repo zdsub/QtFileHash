@@ -20,10 +20,8 @@ public:
 private slots:
     // 重置进度条
     void resetProgressBar(int count);
-    // 添加信息 - 校验结果
-    void addMessage(FileHash fileHash);
-    // 添加信息 - 错误消息
-    void addMessage(QString error);
+    // 添加信息
+    void addMessage(QString message);
     // 当前进度改变
     void currentChange(int progress);
     // 总进度改变

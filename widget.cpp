@@ -9,10 +9,8 @@ Widget::Widget(QWidget *parent)
 {
     ui->setupUi(this);
 
-    qRegisterMetaType<FileHash>("FileHash");
-
     connect(fileHashThread, &FileHashThread::hashStarted, this, &Widget::resetProgressBar);
-    connect(fileHashThread, &FileHashThread::hashResult, this, static_cast<void (Widget::*)(FileHash)> (&Widget::addMessage));
+    connect(fileHashThread, &FileHashThread::hashResult, this, static_cast<void (Widget::*)(QString)> (&Widget::addMessage));
     connect(fileHashThread, &FileHashThread::hashError, this, static_cast<void (Widget::*)(QString)> (&Widget::addMessage));
     connect(fileHashThread, &FileHashThread::hashProgressChanged, this, &Widget::currentChange);
     connect(fileHashThread, &FileHashThread::hashIndexChanged, this, &Widget::totalChange);
@@ -31,14 +29,9 @@ void Widget::resetProgressBar(int count)
     ui->totalProgressBar->setValue(0);
 }
 
-void Widget::addMessage(FileHash fileHash)
+void Widget::addMessage(QString message)
 {
-    ui->messageTextEdit->appendPlainText(fileHash.toString());
-}
-
-void Widget::addMessage(QString error)
-{
-    ui->messageTextEdit->appendPlainText(error);
+    ui->messageTextEdit->appendPlainText(message);
 }
 
 void Widget::currentChange(int progress)
@@ -51,7 +44,6 @@ void Widget::totalChange(int index)
     ui->totalProgressBar->setValue(index);
 }
 
-
 void Widget::on_openButton_clicked()
 {
     QStringList pathList = QFileDialog::getOpenFileNames(this, "选择文件");
@@ -62,9 +54,7 @@ void Widget::on_openButton_clicked()
     }
 }
 
-
 void Widget::on_clearButton_clicked()
 {
     ui->messageTextEdit->clear();
 }
-

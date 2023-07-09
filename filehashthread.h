@@ -1,8 +1,6 @@
 #ifndef FILEHASHTHREAD_H
 #define FILEHASHTHREAD_H
 
-#include "filehash.h"
-
 #include <QThread>
 #include <QCryptographicHash>
 
@@ -48,7 +46,7 @@ signals:
     // 哈希校验索引改变
     void hashIndexChanged(int index);
     // 哈希校验结果
-    void hashResult(FileHash fileHash);
+    void hashResult(QString result);
 };
 
 #endif // FILEHASHTHREAD_H
