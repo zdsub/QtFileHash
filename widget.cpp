@@ -3,6 +3,7 @@
 
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QClipboard>
 
 Widget::Widget(QWidget *parent)
     : QWidget(parent)
@@ -76,4 +77,10 @@ void Widget::on_saveButton_clicked()
     }
     else
         QMessageBox::critical(this, "错误", "文件打开失败");
+}
+
+void Widget::on_copyButton_clicked()
+{
+    QString message = ui->messageTextEdit->toPlainText();
+    QApplication::clipboard()->setText(message);
 }
