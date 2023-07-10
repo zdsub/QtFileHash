@@ -2,6 +2,7 @@
 #include "ui_widget.h"
 
 #include <QFileDialog>
+#include <QMessageBox>
 
 Widget::Widget(QWidget *parent)
     : QWidget(parent)
@@ -57,4 +58,22 @@ void Widget::on_openButton_clicked()
 void Widget::on_clearButton_clicked()
 {
     ui->messageTextEdit->clear();
+}
+
+void Widget::on_saveButton_clicked()
+{
+    QString path = QFileDialog::getSaveFileName(this, "保存文件", QApplication::applicationDirPath(), "文本文件(*.txt);;所有文件(*.*)");
+    if (path.isEmpty())
+        return;
+
+    QString message = ui->messageTextEdit->toPlainText();
+
+    QFile file(path);
+    if (file.open(QIODevice::WriteOnly))
+    {
+        file.write(message.toUtf8());
+        file.close();
+    }
+    else
+        QMessageBox::critical(this, "错误", "文件打开失败");
 }
