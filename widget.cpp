@@ -47,7 +47,7 @@ void Widget::totalChange(int index)
 
 void Widget::on_openButton_clicked()
 {
-    QStringList pathList = QFileDialog::getOpenFileNames(this, "选择文件");
+    QStringList pathList = QFileDialog::getOpenFileNames(this, NULL, NULL, "所有文件(*.*)");
     if (pathList.size() != 0)
     {
         fileHashThread->setPathList(pathList);
@@ -62,7 +62,7 @@ void Widget::on_clearButton_clicked()
 
 void Widget::on_saveButton_clicked()
 {
-    QString path = QFileDialog::getSaveFileName(this, "保存文件", QApplication::applicationDirPath(), "文本文件(*.txt);;所有文件(*.*)");
+    QString path = QFileDialog::getSaveFileName(this, NULL, NULL, "文本文件(*.txt);;所有文件(*.*)");
     if (path.isEmpty())
         return;
 
