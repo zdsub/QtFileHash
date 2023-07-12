@@ -19,15 +19,25 @@
   <property name="maximumSize">
    <size>
     <width>620</width>
-    <height>400</height>
+    <height>350</height>
    </size>
+  </property>
+  <property name="acceptDrops">
+   <bool>true</bool>
   </property>
   <property name="windowTitle">
    <string>文件校验</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <widget class="QPlainTextEdit" name="messageTextEdit"/>
+    <widget class="QPlainTextEdit" name="messageTextEdit">
+     <property name="acceptDrops">
+      <bool>false</bool>
+     </property>
+     <property name="readOnly">
+      <bool>true</bool>
+     </property>
+    </widget>
    </item>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_2">

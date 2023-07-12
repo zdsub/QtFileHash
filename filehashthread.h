@@ -12,7 +12,8 @@ public:
     FileHashThread(QObject* parent = nullptr);
     ~FileHashThread();
 
-    void run();
+    void run() Q_DECL_OVERRIDE;
+
     // 设置待校验文件路径集合
     void setPathList(QStringList pathList);
 
