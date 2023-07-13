@@ -2,8 +2,11 @@
 
 #include <QFile>
 
-FileHashThread::FileHashThread(QObject* parent) : QThread(parent)
+FileHashThread::FileHashThread()
 {
+    isStop = false;
+    bufferSize = 4096;
+
     md4 = new QCryptographicHash(QCryptographicHash::Md4);
     md5 = new QCryptographicHash(QCryptographicHash::Md5);
     sha1 = new QCryptographicHash(QCryptographicHash::Sha1);
@@ -20,18 +23,23 @@ FileHashThread::~FileHashThread()
     delete sha512;
 }
 
-void FileHashThread::setPathList(QStringList pathList)
+void FileHashThread::setFileList(QStringList fileList)
 {
-    this->pathList = pathList;
+    this->fileList = fileList;
+}
+
+void FileHashThread::setStop(bool isStop)
+{
+    this->isStop = isStop;
 }
 
 void FileHashThread::run()
 {
-    emit hashStarted(pathList.size());
-
-    for (int i = 0; i < pathList.size(); i++)
+    emit hashStarted(fileList.size());
+    
+    for (int i = 0; i < fileList.size(); i++)
     {
-        hash(pathList[i]);
+        hash(fileList[i]);
         emit hashIndexChanged(i + 1);
     }
 

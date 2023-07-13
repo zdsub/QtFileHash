@@ -9,31 +9,38 @@ class FileHashThread : public QThread
     Q_OBJECT
 
 public:
-    FileHashThread(QObject* parent = nullptr);
+    // 构造函数
+    FileHashThread();
+    // 析构函数
     ~FileHashThread();
 
+    // 线程函数
     void run() Q_DECL_OVERRIDE;
 
-    // 设置待校验文件路径集合
-    void setPathList(QStringList pathList);
+    // 设置待计算文件集合
+    void setFileList(QStringList fileList);
+    // 设置是否停止计算
+    void setStop(bool isStop);
 
 private:
     // 计算文件哈希
     void hash(QString path);
 
 private:
-    // 待计算文件路径集合
-    QStringList pathList;
+    // 待计算文件集合
+    QStringList fileList;
 
-    // 文件缓冲区，4KB
-    int bufferSize = 4096;
+    // 是否停止计算
+    bool isStop;
+    // 文件缓冲区
+    int bufferSize;
 
     // 校验算法
-    QCryptographicHash* md4 = nullptr;
-    QCryptographicHash* md5 = nullptr;
-    QCryptographicHash* sha1 = nullptr;
-    QCryptographicHash* sha256 = nullptr;
-    QCryptographicHash* sha512 = nullptr;
+    QCryptographicHash* md4;
+    QCryptographicHash* md5;
+    QCryptographicHash* sha1;
+    QCryptographicHash* sha256;
+    QCryptographicHash* sha512;
 
 signals:
     // 哈希校验开始

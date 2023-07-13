@@ -6,11 +6,12 @@
 #include <QClipboard>
 #include <QMimeData>
 
-Widget::Widget(QWidget *parent)
-    : QWidget(parent)
-    , ui(new Ui::Widget)
+Widget::Widget()
+    : ui(new Ui::Widget)
 {
     ui->setupUi(this);
+
+    fileHashThread = new FileHashThread();
 
     connect(fileHashThread, SIGNAL(hashStarted(int)), this, SLOT(resetProgressBar(int)));
     connect(fileHashThread, SIGNAL(hashResult(QString)), this, SLOT(addMessage(QString)));
@@ -22,6 +23,10 @@ Widget::Widget(QWidget *parent)
 Widget::~Widget()
 {
     delete ui;
+
+    fileHashThread->setStop(true);
+    fileHashThread->wait();
+    delete fileHashThread;
 }
 
 void Widget::dragEnterEvent(QDragEnterEvent *event)
@@ -33,11 +38,11 @@ void Widget::dropEvent(QDropEvent *event)
 {
     QList<QUrl> urls = event->mimeData()->urls();
 
-    QStringList pathList;
+    QStringList fileList;
     for (int i = 0; i < urls.count(); i++)
-        pathList << urls[i].toLocalFile();
+        fileList << urls[i].toLocalFile();
 
-    startHash(pathList);
+    startHash(fileList);
 }
 
 void Widget::resetProgressBar(int count)
@@ -65,8 +70,8 @@ void Widget::totalChange(int index)
 
 void Widget::on_openButton_clicked()
 {
-    QStringList pathList = QFileDialog::getOpenFileNames(this, NULL, NULL, "所有文件(*.*)");
-    startHash(pathList);
+    QStringList fileList = QFileDialog::getOpenFileNames(this, NULL, NULL, "所有文件(*.*)");
+    startHash(fileList);
 }
 
 void Widget::on_clearButton_clicked()
@@ -98,11 +103,17 @@ void Widget::on_copyButton_clicked()
     QApplication::clipboard()->setText(message);
 }
 
-void Widget::startHash(QStringList pathList)
+void Widget::startHash(QStringList fileList)
 {
-    if (pathList.size() != 0)
+    if (fileList.size() != 0)
     {
-        fileHashThread->setPathList(pathList);
+        fileHashThread->setFileList(fileList);
+        fileHashThread->setStop(false);
         fileHashThread->start();
     }
+}
+
+void Widget::on_stopButton_clicked()
+{
+    fileHashThread->setStop(true);
 }

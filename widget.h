@@ -14,10 +14,12 @@ class Widget : public QWidget
     Q_OBJECT
 
 public:
-    Widget(QWidget *parent = nullptr);
+    // 构造函数
+    Widget();
+    // 析构函数
     ~Widget();
 
-    // 重写事件
+    // 拖拽事件
     void dragEnterEvent(QDragEnterEvent* event) Q_DECL_OVERRIDE;
     void dropEvent(QDropEvent* event) Q_DECL_OVERRIDE;
 
@@ -36,14 +38,15 @@ private slots:
     void on_clearButton_clicked();
     void on_saveButton_clicked();
     void on_copyButton_clicked();
+    void on_stopButton_clicked();
 
 private:
     Ui::Widget *ui;
 
     // 哈希校验线程
-    FileHashThread* fileHashThread = new FileHashThread(this);
+    FileHashThread* fileHashThread;
 
     // 开始校验
-    void startHash(QStringList pathList);
+    void startHash(QStringList fileList);
 };
 #endif // WIDGET_H
