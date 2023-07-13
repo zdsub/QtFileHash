@@ -37,16 +37,13 @@ void FileHashThread::run()
 {
     emit hashStarted(fileList.size());
     
-    for (int i = 0; i < fileList.size(); i++)
-    {
-        hash(fileList[i]);
-        emit hashIndexChanged(i + 1);
-    }
+    for (int i = 0; i < fileList.size() && !isStop; i++)
+        hash(fileList[i], i + 1);
 
     emit hashEnded();
 }
 
-void FileHashThread::hash(QString filePath) {
+void FileHashThread::hash(QString filePath, int index) {
     QFile file(filePath);
     if (!file.open(QIODevice::ReadOnly))
     {
@@ -57,12 +54,12 @@ void FileHashThread::hash(QString filePath) {
     long long size = 0;
     long long fileSize = file.size();
 
-    while (true)
+    if (fileSize != 0)
     {
-        QByteArray byteArray = file.read(bufferSize);
-
-        if (size != fileSize)
+        while (size < fileSize && !isStop)
         {
+            QByteArray byteArray = file.read(bufferSize);
+
             md4->addData(byteArray);
             md5->addData(byteArray);
             sha1->addData(byteArray);
@@ -72,22 +69,35 @@ void FileHashThread::hash(QString filePath) {
             size += byteArray.size();
             emit hashProgressChanged(static_cast<double>(size) / fileSize * 100);
         }
-        else
-        {
-            if (fileSize == 0)
-                emit hashProgressChanged(100);
-            break;
-        }
     }
+    else
+        emit hashProgressChanged(100);
 
     file.close();
 
-    // 获取校验结果
-    QString _md4 = md4->result().toHex();
-    QString _md5 = md5->result().toHex();
-    QString _sha1 = sha1->result().toHex();
-    QString _sha256 = sha256->result().toHex();
-    QString _sha512 = sha512->result().toHex();
+    // 完成计算
+    if (size == fileSize)
+    {
+        // 获取校验结果
+        QString _md4 = md4->result().toHex();
+        QString _md5 = md5->result().toHex();
+        QString _sha1 = sha1->result().toHex();
+        QString _sha256 = sha256->result().toHex();
+        QString _sha512 = sha512->result().toHex();
+
+        // 格式化校验结果
+        QString message = "文件: %1\n"
+                          "大小: %2字节\n"
+                          "MD4: %3\n"
+                          "MD5: %4\n"
+                          "SHA1: %5\n"
+                          "SHA256: %6\n"
+                          "SHA512: %7\n";
+        QString result = message.arg(filePath, QString::number(fileSize), _md4, _md5, _sha1, _sha256, _sha512);
+
+        emit hashResult(result);
+        emit hashIndexChanged(index);
+    }
 
     // 重置检验结果
     md4->reset();
@@ -95,16 +105,4 @@ void FileHashThread::hash(QString filePath) {
     sha1->reset();
     sha256->reset();
     sha512->reset();
-
-    // 格式化校验结果
-    QString message = "文件: %1\n"
-                      "大小: %2字节\n"
-                      "MD4: %3\n"
-                      "MD5: %4\n"
-                      "SHA1: %5\n"
-                      "SHA256: %6\n"
-                      "SHA512: %7\n";
-    QString result = message.arg(filePath, QString::number(fileSize), _md4, _md5, _sha1, _sha256, _sha512);
-
-    emit hashResult(result);
 }
