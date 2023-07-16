@@ -23,21 +23,19 @@ Widget::Widget()
 
 Widget::~Widget()
 {
-    delete ui;
-
-    fileHashThread->setStop(true);
-    fileHashThread->wait();
     delete fileHashThread;
+    delete ui;  
 }
 
-void Widget::dragEnterEvent(QDragEnterEvent *event)
+void Widget::dragEnterEvent(QDragEnterEvent* event)
 {
     if (ui->openButton->isEnabled())
         event->acceptProposedAction();
     else
         event->ignore();
 }
-void Widget::dropEvent(QDropEvent *event)
+
+void Widget::dropEvent(QDropEvent* event)
 {
     QList<QUrl> urls = event->mimeData()->urls();
 
@@ -46,6 +44,14 @@ void Widget::dropEvent(QDropEvent *event)
         fileList << urls[i].toLocalFile();
 
     startHash(fileList);
+}
+
+void Widget::closeEvent(QCloseEvent* event)
+{
+    fileHashThread->setStop(true);
+    fileHashThread->wait();
+
+    event->accept();
 }
 
 void Widget::resetProgressBar(int count)
@@ -77,6 +83,7 @@ void Widget::totalChange(int index)
 
 void Widget::resetOpen()
 {
+    ui->stopButton->setEnabled(false);
     ui->openButton->setEnabled(true);
 }
 

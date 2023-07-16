@@ -22,6 +22,8 @@ public:
     // 拖拽事件
     void dragEnterEvent(QDragEnterEvent* event) Q_DECL_OVERRIDE;
     void dropEvent(QDropEvent* event) Q_DECL_OVERRIDE;
+    // 关闭事件
+    void closeEvent(QCloseEvent* event) Q_DECL_OVERRIDE;
 
 private slots:
     // 重置进度条
