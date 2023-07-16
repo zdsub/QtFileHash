@@ -25,6 +25,9 @@ public:
     // 关闭事件
     void closeEvent(QCloseEvent* event) Q_DECL_OVERRIDE;
 
+    // 开始校验
+    void startHash(QStringList fileList);
+
 private slots:
     // 重置进度条
     void resetProgressBar(int count);
@@ -49,8 +52,5 @@ private:
 
     // 哈希校验线程
     FileHashThread* fileHashThread;
-
-    // 开始校验
-    void startHash(QStringList fileList);
 };
 #endif // WIDGET_H

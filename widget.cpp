@@ -90,7 +90,8 @@ void Widget::resetOpen()
 void Widget::on_openButton_clicked()
 {
     QStringList fileList = QFileDialog::getOpenFileNames(this, NULL, NULL, "所有文件(*.*)");
-    startHash(fileList);
+    if (fileList.size() > 0)
+        startHash(fileList);
 }
 
 void Widget::on_clearButton_clicked()
@@ -128,15 +129,12 @@ void Widget::on_copyButton_clicked()
 
 void Widget::startHash(QStringList fileList)
 {
-    if (fileList.size() != 0)
-    {
-        ui->openButton->setEnabled(false);
-        ui->stopButton->setEnabled(true);
+    ui->openButton->setEnabled(false);
+    ui->stopButton->setEnabled(true);
 
-        fileHashThread->setFileList(fileList);
-        fileHashThread->setStop(false);
-        fileHashThread->start();
-    }
+    fileHashThread->setFileList(fileList);
+    fileHashThread->setStop(false);
+    fileHashThread->start();
 }
 
 void Widget::on_stopButton_clicked()
