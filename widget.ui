@@ -91,6 +91,13 @@
        </property>
       </widget>
      </item>
+     <item>
+      <widget class="QPushButton" name="closeButton">
+       <property name="text">
+        <string>关闭(&amp;X)</string>
+       </property>
+      </widget>
+     </item>
     </layout>
    </item>
    <item>

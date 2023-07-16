@@ -10,9 +10,9 @@ Widget::Widget()
     : ui(new Ui::Widget)
 {
     ui->setupUi(this);
+    connect(ui->closeButton, SIGNAL(clicked(bool)), this, SLOT(close()));
 
     fileHashThread = new FileHashThread();
-
     connect(fileHashThread, SIGNAL(hashStarted(int)), this, SLOT(resetProgressBar(int)));
     connect(fileHashThread, SIGNAL(hashResult(QString)), this, SLOT(addMessage(QString)));
     connect(fileHashThread, SIGNAL(hashError(QString)), this, SLOT(addMessage(QString)));
