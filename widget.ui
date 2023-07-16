@@ -53,6 +53,9 @@
      </item>
      <item>
       <widget class="QPushButton" name="clearButton">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
        <property name="text">
         <string>清除(&amp;L)</string>
        </property>
@@ -60,6 +63,9 @@
      </item>
      <item>
       <widget class="QPushButton" name="copyButton">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
        <property name="text">
         <string>复制(&amp;C)</string>
        </property>
@@ -67,6 +73,9 @@
      </item>
      <item>
       <widget class="QPushButton" name="saveButton">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
        <property name="text">
         <string>保存(&amp;S)...</string>
        </property>
@@ -74,6 +83,9 @@
      </item>
      <item>
       <widget class="QPushButton" name="stopButton">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
        <property name="text">
         <string>停止(&amp;T)</string>
        </property>

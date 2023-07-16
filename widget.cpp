@@ -18,6 +18,7 @@ Widget::Widget()
     connect(fileHashThread, SIGNAL(hashError(QString)), this, SLOT(addMessage(QString)));
     connect(fileHashThread, SIGNAL(hashProgressChanged(int)), this, SLOT(currentChange(int)));
     connect(fileHashThread, SIGNAL(hashIndexChanged(int)), this, SLOT(totalChange(int)));
+    connect(fileHashThread, SIGNAL(hashEnded()), this, SLOT(resetOpen()));
 }
 
 Widget::~Widget()
@@ -31,9 +32,11 @@ Widget::~Widget()
 
 void Widget::dragEnterEvent(QDragEnterEvent *event)
 {
-    event->acceptProposedAction();
+    if (ui->openButton->isEnabled())
+        event->acceptProposedAction();
+    else
+        event->ignore();
 }
-
 void Widget::dropEvent(QDropEvent *event)
 {
     QList<QUrl> urls = event->mimeData()->urls();
@@ -55,6 +58,10 @@ void Widget::resetProgressBar(int count)
 
 void Widget::addMessage(QString message)
 {
+    ui->clearButton->setEnabled(true);
+    ui->copyButton->setEnabled(true);
+    ui->saveButton->setEnabled(true);
+
     ui->messageTextEdit->appendPlainText(message);
 }
 
@@ -68,6 +75,11 @@ void Widget::totalChange(int index)
     ui->totalProgressBar->setValue(index);
 }
 
+void Widget::resetOpen()
+{
+    ui->openButton->setEnabled(true);
+}
+
 void Widget::on_openButton_clicked()
 {
     QStringList fileList = QFileDialog::getOpenFileNames(this, NULL, NULL, "所有文件(*.*)");
@@ -76,6 +88,10 @@ void Widget::on_openButton_clicked()
 
 void Widget::on_clearButton_clicked()
 {
+    ui->clearButton->setEnabled(false);
+    ui->copyButton->setEnabled(false);
+    ui->saveButton->setEnabled(false);
+
     ui->messageTextEdit->clear();
 }
 
@@ -107,6 +123,9 @@ void Widget::startHash(QStringList fileList)
 {
     if (fileList.size() != 0)
     {
+        ui->openButton->setEnabled(false);
+        ui->stopButton->setEnabled(true);
+
         fileHashThread->setFileList(fileList);
         fileHashThread->setStop(false);
         fileHashThread->start();
@@ -115,5 +134,6 @@ void Widget::startHash(QStringList fileList)
 
 void Widget::on_stopButton_clicked()
 {
+    ui->stopButton->setEnabled(false);
     fileHashThread->setStop(true);
 }

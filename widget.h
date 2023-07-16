@@ -32,6 +32,8 @@ private slots:
     void currentChange(int progress);
     // 总进度改变
     void totalChange(int index);
+    // 重置打开按钮
+    void resetOpen();
 
     // 自动槽函数
     void on_openButton_clicked();
