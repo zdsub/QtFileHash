@@ -25,6 +25,8 @@ public:
 private:
     // 计算文件哈希
     void hash(QString path, int index);
+    // 发送错误信息
+    void emitError(int index, QString error);
 
 private:
     // 待计算文件集合

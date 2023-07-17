@@ -1,6 +1,7 @@
 #include "filehashthread.h"
 
 #include <QFile>
+#include <QFileInfo>
 
 FileHashThread::FileHashThread()
 {
@@ -35,22 +36,38 @@ void FileHashThread::setStop(bool isStop)
 
 void FileHashThread::run()
 {
-    emit hashStarted(fileList.size());
-    
-    for (int i = 0; i < fileList.size() && !isStop; i++)
-        hash(fileList[i], i + 1);
+    int size = fileList.size();
 
-    emit hashEnded();
+    if (size > 0)
+    {
+        emit hashStarted(size);
+
+        for (int i = 0; i < size && !isStop; i++)
+            hash(fileList[i], i);
+
+        emit hashEnded();
+    }
 }
 
 void FileHashThread::hash(QString filePath, int index) {
+    QFileInfo info(filePath);
+
+    if (!info.exists())
+    {
+        emitError(index, "文件不存在");
+        return;
+    }
+    else if (!info.isFile())
+    {
+        emitError(index, "不是文件");
+        return;
+    }
+
     QFile file(filePath);
 
     if (!file.open(QIODevice::ReadOnly))
     {
-        emit hashError(filePath + "\n文件打开失败\n");
-        emit hashProgressChanged(100);
-        emit hashIndexChanged(index);
+        emitError(index, "打开文件失败");
         return;
     }
 
@@ -99,7 +116,7 @@ void FileHashThread::hash(QString filePath, int index) {
         QString result = message.arg(filePath, QString::number(fileSize), _md4, _md5, _sha1, _sha256, _sha512);
 
         emit hashResult(result);
-        emit hashIndexChanged(index);
+        emit hashIndexChanged(index + 1);
     }
 
     // 重置检验结果
@@ -108,4 +125,11 @@ void FileHashThread::hash(QString filePath, int index) {
     sha1->reset();
     sha256->reset();
     sha512->reset();
+}
+
+void FileHashThread::emitError(int index, QString error)
+{
+    emit hashError(fileList[index] + "\n" + error + "\n");
+    emit hashProgressChanged(100);
+    emit hashIndexChanged(index + 1);
 }
