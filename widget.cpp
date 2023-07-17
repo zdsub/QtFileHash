@@ -29,10 +29,31 @@ Widget::~Widget()
 
 void Widget::dragEnterEvent(QDragEnterEvent* event)
 {
-    if (ui->openButton->isEnabled())
-        event->acceptProposedAction();
-    else
-        event->ignore();
+    if (ui->openButton->isEnabled() && event->mimeData()->hasUrls())
+    {
+        QList<QUrl> urls = event->mimeData()->urls();
+
+        int i = 0;
+        while (i < urls.length())
+        {
+            QString path = urls[i].toLocalFile();
+            QFileInfo info(path);
+
+            if (!info.isFile())
+                break;
+
+            i++;
+        }
+
+        if (i == urls.length())
+        {
+            event->acceptProposedAction();
+            return;
+        }
+
+    }
+
+    event->ignore();
 }
 
 void Widget::dropEvent(QDropEvent* event)

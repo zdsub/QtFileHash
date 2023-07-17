@@ -45,9 +45,12 @@ void FileHashThread::run()
 
 void FileHashThread::hash(QString filePath, int index) {
     QFile file(filePath);
+
     if (!file.open(QIODevice::ReadOnly))
     {
         emit hashError(filePath + "\n文件打开失败\n");
+        emit hashProgressChanged(100);
+        emit hashIndexChanged(index);
         return;
     }
 
