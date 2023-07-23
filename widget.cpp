@@ -126,7 +126,7 @@ void Widget::on_clearButton_clicked()
 
 void Widget::on_saveButton_clicked()
 {
-    QString path = QFileDialog::getSaveFileName(this, NULL, NULL, "文本文件(*.txt);;所有文件(*.*)");
+    QString path = QFileDialog::getSaveFileName(this, NULL, "hash.txt", "文本文件(*.txt);;所有文件(*.*)");
     if (path.isEmpty())
         return;
 
