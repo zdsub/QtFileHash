@@ -99,11 +99,11 @@ void FileHashThread::hash(QString filePath, int index) {
     if (size == fileSize)
     {
         // 获取校验结果
-        QString _md4 = md4->result().toHex();
-        QString _md5 = md5->result().toHex();
-        QString _sha1 = sha1->result().toHex();
-        QString _sha256 = sha256->result().toHex();
-        QString _sha512 = sha512->result().toHex();
+        QString _md4 = md4->result().toHex().toUpper();
+        QString _md5 = md5->result().toHex().toUpper();
+        QString _sha1 = sha1->result().toHex().toUpper();
+        QString _sha256 = sha256->result().toHex().toUpper();
+        QString _sha512 = sha512->result().toHex().toUpper();
 
         // 格式化校验结果
         QString message = "文件: %1\n"
