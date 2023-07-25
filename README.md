@@ -1,6 +1,6 @@
 # QtFileHash
 
-QtFileHash是一款基于Qt开发的跨平台文件校验工具，支持MD4、MD5、SHA1、SHA256、SHA512。
+QtFileHash是一款基于Qt开发的跨平台文件校验工具，支持Windows、Linux、MacOS平台，支持MD4、MD5、SHA1、SHA256、SHA512算法。
 
 项目演示：[https://www.bilibili.com/video/BV1ZM4y1x7rk](https://www.bilibili.com/video/BV1ZM4y1x7rk)
 
